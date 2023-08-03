@@ -17,13 +17,13 @@ go get github.com/spiceai/spice-functions-go
 package main
 
 import (
-  "fmt"
+	"fmt"
 	"github.com/spiceai/spice-functions-go/function"
 	"github.com/spiceai/gospice/v2"
 )
 
 func hello(ctx *function.FunctionCtx, duckDb *sql.DB, client *gospice.SpiceClient) error {
-  fmt.Println("Hello Spice Functions!")
+	fmt.Println("Hello Spice Functions!")
 	return nil
 }
 
