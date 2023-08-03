@@ -22,7 +22,7 @@ import (
 	"github.com/spiceai/gospice/v2"
 )
 
-func hello(ctx *function.FunctionCtx, duckDb *sql.DB, client *gospice.SpiceClient) error {
+func hello(ctx *function.FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error {
 	fmt.Println("Hello Spice Functions!")
 	return nil
 }
