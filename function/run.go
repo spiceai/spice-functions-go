@@ -18,7 +18,7 @@ type FunctionContextVariables struct {
 	BlockHash   string `mapstructure:"block_hash,omitempty" json:"block_hash,omitempty" yaml:"block_hash,omitempty"`
 }
 
-func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, client *gospice.SpiceClient) error) {
+func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error) {
 	inputsDir := os.Getenv("INPUT_DIR")
 	dataDir := os.Getenv("DATA_DIR")
 	outputsDir := os.Getenv("OUTPUT_DIR")
@@ -26,8 +26,8 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, client *gospice.SpiceCli
 	firecacheAddress := os.Getenv("SPICE_FIRECACHE_ADDRESS")
 	apiKey := os.Getenv("SPICE_API_KEY")
 
-	client := gospice.NewSpiceClientWithAddress(flightAddress, firecacheAddress)
-	err := client.Init(apiKey)
+	spiceClient := gospice.NewSpiceClientWithAddress(flightAddress, firecacheAddress)
+	err := spiceClient.Init(apiKey)
 	if err != nil {
 		log.Fatalf("Failed to initialize Spice client: %s", err)
 	}
@@ -37,7 +37,7 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, client *gospice.SpiceCli
 	if err != nil {
 		log.Fatalf("Failed to acquire persistent data lock: %s", err)
 	}
-	defer lockFile.Unlock()
+	defer lockFile.Unlock() // nolint: errcheck
 
 	contextYamlBytes, err := os.ReadFile(filepath.Join(inputsDir, "context.yaml"))
 	if err != nil {
@@ -70,7 +70,7 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, client *gospice.SpiceCli
 		log.Fatalf("Failed to attach output duckdb: %s", err)
 	}
 
-	err = handler(functionCtx, duckDb, client)
+	err = handler(functionCtx, duckDb, spiceClient)
 	if err != nil {
 		panic(err)
 	}
