@@ -37,7 +37,7 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.Spi
 	if err != nil {
 		log.Fatalf("Failed to acquire persistent data lock: %s", err)
 	}
-	defer lockFile.Unlock()
+	defer lockFile.Unlock() // nolint: errcheck
 
 	contextYamlBytes, err := os.ReadFile(filepath.Join(inputsDir, "context.yaml"))
 	if err != nil {
