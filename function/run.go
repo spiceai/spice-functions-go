@@ -18,7 +18,7 @@ type FunctionContextVariables struct {
 	BlockHash   string `mapstructure:"block_hash,omitempty" json:"block_hash,omitempty" yaml:"block_hash,omitempty"`
 }
 
-func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, client *gospice.SpiceClient) error) {
+func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error) {
 	inputsDir := os.Getenv("INPUT_DIR")
 	dataDir := os.Getenv("DATA_DIR")
 	outputsDir := os.Getenv("OUTPUT_DIR")
