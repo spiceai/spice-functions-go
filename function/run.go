@@ -26,8 +26,8 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.Spi
 	firecacheAddress := os.Getenv("SPICE_FIRECACHE_ADDRESS")
 	apiKey := os.Getenv("SPICE_API_KEY")
 
-	client := gospice.NewSpiceClientWithAddress(flightAddress, firecacheAddress)
-	err := client.Init(apiKey)
+	spiceClient := gospice.NewSpiceClientWithAddress(flightAddress, firecacheAddress)
+	err := spiceClient.Init(apiKey)
 	if err != nil {
 		log.Fatalf("Failed to initialize Spice client: %s", err)
 	}
@@ -70,7 +70,7 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.Spi
 		log.Fatalf("Failed to attach output duckdb: %s", err)
 	}
 
-	err = handler(functionCtx, duckDb, client)
+	err = handler(functionCtx, duckDb, spiceClient)
 	if err != nil {
 		panic(err)
 	}
