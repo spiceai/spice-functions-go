@@ -14,8 +14,9 @@ import (
 )
 
 type FunctionContextVariables struct {
-	BlockNumber int64  `mapstructure:"block_number,omitempty" json:"block_number,omitempty" yaml:"block_number,omitempty"`
-	BlockHash   string `mapstructure:"block_hash,omitempty" json:"block_hash,omitempty" yaml:"block_hash,omitempty"`
+	BlockNumber             int64    `mapstructure:"block_number,omitempty" json:"block_number,omitempty" yaml:"block_number,omitempty"`
+	BlockHash               string   `mapstructure:"block_hash,omitempty" json:"block_hash,omitempty" yaml:"block_hash,omitempty"`
+	OutputDatasetMigrations []string `mapstructure:"output_dataset_migrations,omitempty" json:"output_dataset_migrations,omitempty" yaml:"output_dataset_migrations,omitempty"`
 }
 
 func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error) {
@@ -68,6 +69,15 @@ func Run(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.Spi
 	_, err = duckDb.ExecContext(functionCtx, fmt.Sprintf("ATTACH '%s' AS output", outputDb))
 	if err != nil {
 		log.Fatalf("Failed to attach output duckdb: %s", err)
+	}
+
+	if len(contextVars.OutputDatasetMigrations) > 0 {
+		for _, migration := range contextVars.OutputDatasetMigrations {
+			_, err = duckDb.ExecContext(functionCtx, migration)
+			if err != nil {
+				log.Fatalf("Failed to create output dataset: %s\nmigration:\n%s", err, migration)
+			}
+		}
 	}
 
 	err = handler(functionCtx, duckDb, spiceClient)
