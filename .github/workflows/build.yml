@@ -28,3 +28,5 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+        env:
+          SPICE_API_KEY: ${{ secrets.SPICE_API_KEY }}

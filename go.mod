@@ -6,7 +6,7 @@ require github.com/spiceai/gospice/v2 v2.1.0
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/apache/arrow/go/v12 v12.0.0 // indirect
+	github.com/apache/arrow/go/v12 v12.0.0
 	github.com/apache/thrift v0.16.0 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/gofrs/flock v0.8.1
