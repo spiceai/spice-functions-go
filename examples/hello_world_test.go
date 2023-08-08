@@ -7,7 +7,11 @@ import (
 )
 
 func TestHelloWorld(t *testing.T) {
-	outputDb, err := function.Debug(HelloWorldGo)
+	outputDb, err := function.Debug(HelloWorldGo, function.WithOutputDatasetMigration(`
+	create table output.hello_world_golang (
+		block_number bigint,
+		greeting TEXT
+	);`))
 	if err != nil {
 		t.Error(err)
 		return

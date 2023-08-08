@@ -61,6 +61,7 @@ func TestHello(t *testing.T) {
 You can pass a number of options to `function.Debug()` to configure the function's execution.
 
 - `function.WithApiKey("<spice-api-key>")`: **Required**. Sets the Spice API key to use when running the function. Defaults to the `SPICE_API_KEY` environment variable.
+- `function.WithOutputDatasetMigration("CREATE TABLE ...")`: Adds a migration SQL to use to create the output dataset. Can be specified multiple times to add multiple migrations.
 - `function.WithInputsDir("./inputs")`: Sets the path to the inputs directory (currently unused). Defaults to `./inputs`.
 - `function.WithDataDir("./data")`: Sets the path to the persistent data directory. Defaults to `./data`.
 - `function.WithOutputsDir("./outputs")`: Sets the path to the outputs directory. Defaults to `./outputs`.

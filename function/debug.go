@@ -20,9 +20,10 @@ type debugOptions struct {
 	firecacheAddress string
 	apiKey           string
 
-	pathTrigger string
-	blockNumber int64
-	blockHash   string
+	pathTrigger             string
+	blockNumber             int64
+	blockHash               string
+	outputDatasetMigrations []string
 }
 
 func defaultDebugOptions() *debugOptions {
@@ -90,6 +91,12 @@ func WithBlockNumber(blockNumber int64) DebugOption {
 func WithBlockHash(blockHash string) DebugOption {
 	return func(o *debugOptions) {
 		o.blockHash = blockHash
+	}
+}
+
+func WithOutputDatasetMigration(migrationSql string) DebugOption {
+	return func(o *debugOptions) {
+		o.outputDatasetMigrations = append(o.outputDatasetMigrations, migrationSql)
 	}
 }
 
@@ -169,6 +176,15 @@ func Debug(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.S
 	_, err = duckDb.ExecContext(functionCtx, fmt.Sprintf("ATTACH '%s' AS output", outputDb))
 	if err != nil {
 		return nil, fmt.Errorf("failed to attach output duckdb: %w", err)
+	}
+
+	if len(opts.outputDatasetMigrations) > 0 {
+		for _, migration := range opts.outputDatasetMigrations {
+			_, err = duckDb.ExecContext(functionCtx, migration)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create output dataset: %w\nmigration:\n%s", err, migration)
+			}
+		}
 	}
 
 	err = handler(functionCtx, duckDb, spiceClient)
