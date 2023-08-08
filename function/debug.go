@@ -20,7 +20,7 @@ type debugOptions struct {
 	firecacheAddress string
 	apiKey           string
 
-	chainName   string
+	pathTrigger string
 	blockNumber int64
 	blockHash   string
 }
@@ -33,65 +33,67 @@ func defaultDebugOptions() *debugOptions {
 		flightAddress:    "flight.spiceai.io:443",
 		firecacheAddress: "firecache.spiceai.io:443",
 		apiKey:           os.Getenv("SPICE_API_KEY"),
-		chainName:        "eth",
+		pathTrigger:      "eth",
 	}
 }
 
-func WithInputsDir(inputsDir string) func(*debugOptions) {
+type DebugOption func(*debugOptions)
+
+func WithInputsDir(inputsDir string) DebugOption {
 	return func(o *debugOptions) {
 		o.inputsDir = inputsDir
 	}
 }
 
-func WithDataDir(dataDir string) func(*debugOptions) {
+func WithDataDir(dataDir string) DebugOption {
 	return func(o *debugOptions) {
 		o.dataDir = dataDir
 	}
 }
 
-func WithOutputsDir(outputsDir string) func(*debugOptions) {
+func WithOutputsDir(outputsDir string) DebugOption {
 	return func(o *debugOptions) {
 		o.outputsDir = outputsDir
 	}
 }
 
-func WithFlightAddress(flightAddress string) func(*debugOptions) {
+func WithFlightAddress(flightAddress string) DebugOption {
 	return func(o *debugOptions) {
 		o.flightAddress = flightAddress
 	}
 }
 
-func WithFirecacheAddress(firecacheAddress string) func(*debugOptions) {
+func WithFirecacheAddress(firecacheAddress string) DebugOption {
 	return func(o *debugOptions) {
 		o.firecacheAddress = firecacheAddress
 	}
 }
 
-func WithApiKey(apiKey string) func(*debugOptions) {
+func WithApiKey(apiKey string) DebugOption {
 	return func(o *debugOptions) {
 		o.apiKey = apiKey
 	}
 }
 
-func WithChain(chain string) func(*debugOptions) {
+func WithPathTrigger(pathTrigger string) DebugOption {
 	return func(o *debugOptions) {
-		o.chainName = chain
+		o.pathTrigger = pathTrigger
 	}
 }
 
-func WithBlockNumber(blockNumber int64) func(*debugOptions) {
+func WithBlockNumber(blockNumber int64) DebugOption {
 	return func(o *debugOptions) {
 		o.blockNumber = blockNumber
 	}
 }
 
-func WithBlockHash(blockHash string) func(*debugOptions) {
+func WithBlockHash(blockHash string) DebugOption {
 	return func(o *debugOptions) {
 		o.blockHash = blockHash
 	}
 }
 
-func Debug(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error, options ...func(*debugOptions)) (*sql.DB, error) {
+func Debug(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.SpiceClient) error, options ...DebugOption) (*sql.DB, error) {
 	opts := defaultDebugOptions()
 	for _, opt := range options {
 		opt(opts)
@@ -127,7 +129,7 @@ func Debug(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.S
 	blockHash := opts.blockHash
 
 	if blockNumber == 0 {
-		rr, err := spiceClient.Query(context.Background(), fmt.Sprintf("SELECT MAX(number) from %s.recent_blocks", opts.chainName))
+		rr, err := spiceClient.Query(context.Background(), fmt.Sprintf("SELECT MAX(number) from %s.recent_blocks", opts.pathTrigger))
 		if err != nil {
 			return nil, fmt.Errorf("failed to query recent blocks: %w", err)
 		}
@@ -137,7 +139,7 @@ func Debug(handler func(ctx *FunctionCtx, duckDb *sql.DB, spiceClient *gospice.S
 	}
 
 	if blockHash == "" {
-		rr, err := spiceClient.Query(context.Background(), fmt.Sprintf("SELECT hash from %s.blocks WHERE number = %d", opts.chainName, blockNumber))
+		rr, err := spiceClient.Query(context.Background(), fmt.Sprintf("SELECT hash from %s.blocks WHERE number = %d", opts.pathTrigger, blockNumber))
 		if err != nil {
 			return nil, fmt.Errorf("failed to query recent blocks: %w", err)
 		}

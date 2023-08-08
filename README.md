@@ -64,6 +64,6 @@ You can pass a number of options to `function.Debug()` to configure the function
 - `function.WithInputsDir("./inputs")`: Sets the path to the inputs directory (currently unused). Defaults to `./inputs`.
 - `function.WithDataDir("./data")`: Sets the path to the persistent data directory. Defaults to `./data`.
 - `function.WithOutputsDir("./outputs")`: Sets the path to the outputs directory. Defaults to `./outputs`.
-- `function.WithChain("eth")`: Sets the blockchain to use. Defaults to `eth`.
+- `function.WithPathTrigger("eth")`: Sets the path this function is triggered on. Defaults to `eth`.
 - `function.WithBlockNumber(17400000)`: Sets the block number to use. Defaults to the latest block from the chain.
 - `function.WithBlockHash("0x...")`: Sets the block hash to use. Defaults to the latest block from the chain.
