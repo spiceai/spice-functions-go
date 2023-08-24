@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/apache/arrow/go/v12/arrow/array"
+	"github.com/apache/arrow/go/v13/arrow/array"
 	"github.com/gofrs/flock"
 	"github.com/spiceai/gospice/v2"
 )

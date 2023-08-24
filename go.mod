@@ -4,23 +4,16 @@ go 1.20
 
 require github.com/spiceai/gospice/v2 v2.2.0
 
-require github.com/apache/arrow/go/v13 v13.0.0 // indirect
+require github.com/apache/arrow/go/v13 v13.0.0
 
 require (
-	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/apache/arrow/go/v12 v12.0.0
-	github.com/apache/thrift v0.16.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/gofrs/flock v0.8.1
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v23.1.21+incompatible // indirect
-	github.com/klauspost/asmfmt v1.3.2 // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.3 // indirect
 	github.com/marcboeker/go-duckdb v1.4.3
-	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect
-	github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.17 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
