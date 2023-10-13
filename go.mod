@@ -13,7 +13,7 @@ require (
 	github.com/google/flatbuffers v23.1.21+incompatible // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.3 // indirect
-	github.com/marcboeker/go-duckdb v1.4.3
+	github.com/marcboeker/go-duckdb v1.5.1
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.17 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
