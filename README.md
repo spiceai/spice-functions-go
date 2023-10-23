@@ -1,6 +1,6 @@
 # spice-functions-go
 
-Spice.xyz Go Function handler
+Spice.ai Go Function handler
 
 # Getting Started
 
